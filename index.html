@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoffeTime</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* === Global Styles === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Nunito', Arial, sans-serif;
+      background: linear-gradient(135deg, #f8f4f0 0%, #ffffff 100%);
+      color: #2c1810;
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* Coffee bean decorative elements */
+    .bg-decoration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.05;
+    }
+    
+    .bg-decoration::before {
+      content: '☕';
+      position: absolute;
+      font-size: 3rem;
+      animation: float 20s infinite linear;
+      top: 10%;
+      left: 80%;
+    }
+    
+    .bg-decoration::after {
+      content: '☕';
+      position: absolute;
+      font-size: 2rem;
+      animation: float 25s infinite linear reverse;
+      top: 70%;
+      left: 10%;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+    
+    /* === Header === */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem 0;
+    }
+    
+    .logo {
+      font-family: 'Fredoka', cursive;
+      font-size: 2.8rem;
+      font-weight: 600;
+      color: #2c1810;
+      text-decoration: none;
+      letter-spacing: -1px;
+    }
+    
+    .logo span {
+      color: #d4941e;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    
+    .nav-links a {
+      font-weight: 600;
+      color: #2c1810;
+      text-decoration: none;
+      position: relative;
+      transition: color 0.3s ease;
+      border-radius: 20px;
+      padding: 0.5rem 1rem;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #d4941e;
+      left: 0;
+      bottom: -5px;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-links a:hover::after,
+    .nav-links .active::after {
+      width: 100%;
+    }
+    
+    .nav-links a:hover {
+      color: #d4941e;
+    }
+    
+    .order-btn {
+      background: linear-gradient(135deg, #d4941e 0%, #b87c14 100%);
+      color: white;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-weight: 700;
+      font-family: 'Nunito', sans-serif;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(212, 148, 30, 0.3);
+      font-size: 1rem;
+    }
+    
+    .order-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(212, 148, 30, 0.4);
+    }
+    
+    /* === Hero Section === */
+    .hero-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: center;
+      gap: 3rem;
+      min-height: 70vh;
+    }
+    
+    /* Bean Animation Column */
+    .bean-particles {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .floating-beans {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .bean {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: #8B4513;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      opacity: 0.7;
+      animation: floatBeans 6s infinite ease-in-out;
+    }
+    
+    .bean::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 3px;
+      height: 60%;
+      background: #654321;
+      transform: translate(-50%, -50%);
+      border-radius: 2px;
+    }
+    
+    .bean:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+    .bean:nth-child(2) { top: 30%; left: 60%; animation-delay: 1s; }
+    .bean:nth-child(3) { top: 60%; left: 10%; animation-delay: 2s; }
+    .bean:nth-child(4) { top: 80%; left: 70%; animation-delay: 3s; }
+    .bean:nth-child(5) { top: 20%; left: 80%; animation-delay: 1.5s; }
+    .bean:nth-child(6) { top: 70%; left: 40%; animation-delay: 2.5s; }
+    
+    @keyframes floatBeans {
+      0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+        opacity: 0.7; 
+      }
+      50% { 
+        transform: translateY(-30px) rotate(180deg); 
+        opacity: 1; 
+      }
+    }
+    
+    /* Hero Text */
+    .hero-text {
+      text-align: left;
+      animation: slideInLeft 1s ease-out;
+    }
+    
+    .hero-text h1 {
+      font-family: 'Fredoka', cursive;
+      font-size: 4.2rem;
+      font-weight: 700;
+      color: #d4941e;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      letter-spacing: -2px;
+    }
+    
+    .subtext {
+      max-width: 400px;
+      animation: fadeInUp 1.2s ease-out 0.3s both;
+    }
+    
+    .subtext h3 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #2c1810;
+      margin-bottom: 1rem;
+      font-family: 'Nunito', sans-serif;
+    }
+    
+    .subtext p {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.7;
+    }
+    
+    /* Hero Image */
+    .hero-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: zoomIn 1s ease-out 0.6s both;
+    }
+    
+    .hero-image .image-container {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    
+    .hero-image .image-container:hover {
+      transform: scale(1.05);
+    }
+    
+    .hero-image .image-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(212, 148, 30, 0.1), transparent);
+      z-index: 1;
+    }
+    
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .hero-image:hover img {
+      transform: scale(1.1);
+    }
+    
+    /* === Footer === */
+    footer {
+      background: rgba(44, 24, 16, 0.05);
+      padding: 2rem;
+      margin-top: 4rem;
+    }
+    
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    
+    .social-icons a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 45px;
+      height: 45px;
+      background: #d4941e;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    
+    .social-icons a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(212, 148, 30, 0.4);
+    }
+    
+    /* === Animations === */
+    @keyframes slideInLeft {
+      0% {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes zoomIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    /* === Responsive Design === */
+    @media (max-width: 1024px) {
+      .hero {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+      
+      .bean-particles {
+        grid-column: 1 / -1;
+        height: 300px;
+        order: -1;
+      }
+      
+      .hero-text h1 {
+        font-size: 3rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        gap: 1.5rem;
+      }
+      
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+      }
+      
+      .hero-text {
+        text-align: center;
+      }
+      
+      .hero-text h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero-image .image-container {
+        width: 300px;
+        height: 300px;
+      }
+      
+      .bean-particles {
+        height: 200px;
+      }
+      
+      .logo {
+        font-size: 2.3rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .hero-container {
+        padding: 2rem 1rem;
+      }
+      
+      .hero-text h1 {
+        font-size: 2rem;
+      }
+      
+      .hero-image .image-container {
+        width: 250px;
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-decoration"></div>
+  
+  <header>
+    <nav class="navbar">
+      <a href="#" class="logo">Coffe<span>Time</span></a>
+      <ul class="nav-links">
+        <li><a href="#" class="active">Home</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Events</a></li>
+        <li><a href="#">Calendar</a></li>
+        <li><a href="#">Contact us</a></li>
+      </ul>
+      <button class="order-btn">Order here</button>
+    </nav>
+  </header>
+
+  <main class="hero-container">
+    <div class="hero">
+      <div class="bean-particles">
+        <div class="floating-beans">
+          <div class="bean"></div>
+          <div class="bean"></div>
+          <div class="bean"></div>
+          <div class="bean"></div>
+          <div class="bean"></div>
+          <div class="bean"></div>
+        </div>
+      </div>
+      
+      <div class="hero-text">
+        <h1>The best<br />coffee you<br />will taste</h1>
+        <div class="subtext">
+          <h3>Take it hot or cold</h3>
+          <p>Experience the perfect blend of premium coffee beans, expertly roasted to perfection. Every cup delivers an unforgettable taste that awakens your senses.</p>
+        </div>
+      </div>
+      
+      <div class="hero-image">
+        <div class="image-container">
+          <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&h=800&fit=crop&crop=center" alt="Perfect coffee pour creating beautiful latte art" />
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
